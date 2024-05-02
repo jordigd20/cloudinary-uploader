@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { v2 as cloudinary } from "cloudinary";
 
-export const uploadFile = async (req: Request, res: Response) => {
+export const createFile = async (req: Request, res: Response) => {
   const { id } = req.query;
   const { preset } = req.body;
   const { file } = req;
@@ -33,7 +33,7 @@ export const uploadFile = async (req: Request, res: Response) => {
         .end(file.buffer);
     });
 
-    res.json({
+    return res.json({
       publicId: uploadResult.public_id,
       secureUrl: uploadResult.secure_url,
       message: "File uploaded successfully",
@@ -41,5 +41,25 @@ export const uploadFile = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ errors: [{ msg: "Internal server error" }] });
+  }
+};
+
+export const deleteFile = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { preset } = req.body;
+
+  try {
+    const deleteResult = await cloudinary.uploader.destroy(`${preset}/${id}`);
+
+    if (deleteResult.result === "not found") {
+      return res.status(404).json({ errors: [{ msg: "File not found" }] });
+    }
+
+    return res.json({
+      message: "File deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ errors: [{ msg: "Internal server error" }] });
   }
 };

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { uploadFile } from "../controller/upload";
+import { deleteFile, createFile } from "../controller/upload";
 import { validateFields } from "../middleware/validate-fields";
-import { body, query } from "express-validator";
+import { body, param, query } from "express-validator";
 import { handleFileUpload } from "../middleware/validate-file";
 
 const router = Router();
@@ -20,7 +20,17 @@ router.post(
       }),
     validateFields,
   ],
-  uploadFile
+  createFile
+);
+
+router.delete(
+  "/:id",
+  [
+    param("id").notEmpty(),
+    body("preset", "You must provide a cloudinary upload preset").notEmpty(),
+    validateFields,
+  ],
+  deleteFile
 );
 
 export default router;
