@@ -7,6 +7,7 @@ const upload = multer({
     const allowedMimeTypes = [
       "image/png",
       "image/jpeg",
+      "image/gif",
       "image/svg",
       "image/webp",
       "image/avif",
