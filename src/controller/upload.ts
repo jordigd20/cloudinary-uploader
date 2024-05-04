@@ -17,8 +17,10 @@ export const createFile = async (req: Request, res: Response) => {
       preset,
     });
 
+    const publicId = uploadResult.public_id.split("/")[1];
+
     return res.json({
-      publicId: uploadResult.public_id,
+      publicId,
       secureUrl: uploadResult.secure_url,
       message: "File uploaded successfully",
     });
@@ -64,8 +66,10 @@ export const updateFile = async (req: Request, res: Response) => {
       id,
     });
 
+    const publicId = uploadResult.public_id.split("/")[1];
+
     return res.json({
-      publicId: uploadResult.public_id,
+      publicId,
       secureUrl: uploadResult.secure_url,
       message: "File updated successfully",
     });
